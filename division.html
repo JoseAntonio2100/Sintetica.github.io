@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>División Sintética y Raíces</title> 
+    <style>
+        body { /*Cuerpo de la pagina*/
+            font-family: 'Roboto', sans-serif; /*Fuente principal de todo el curpo de la pagina*/
+            margin: 0; /*Tamaño del margen*/
+            padding: 0; /*Tamaño del espaciado*/
+            background: #f4f6f9; /*Color del cuerpo de la pagina*/
+            color: #333; /*Color del texto*/
+        }
+        header {  /*Encabezado*/
+            background: #007acc; /*Color del texto*/
+            color: white; /*Color del texto del encabezado*/
+            padding: 20px 0; /*Espaciado interior e inferior*/
+            text-align: center; /*Alineacion del texto*/
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /*Sombras*/
+        }
+        header h1 {
+            margin: 0; /*Margenes*/
+            font-size: 24px; /*Tamaño de la fuente del texto*/
+            letter-spacing: 1px; /*Espaciado*/
+        }
+        main { /*Funcion main principal*/
+            margin: 20px auto; /*Margenes*/
+            padding: 20px; /*Tamaño del espaciado*/
+            max-width: 900px; /*Ancho del contenido*/
+            background: white; /*Color del fondo*/
+            border-radius: 8px; /*Tamaño de los bordes redondeados*/
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /*Sombras*/
+        } 
+        input, button { /*Estilos de los botones*/
+            margin: 10px 5px; /*MArgenes*/
+            padding: 12px; /*Tamaño del espaciado*/
+            font-size: 16px; /*Tamaño de la fuente del boton*/
+            border: 1px solid #ccc; /*Bordes del boton*/
+            border-radius: 6px; /*Bordes redondos del boton*/
+        }
+        input {
+            width: calc(100% - 20px); /*Anchos del boton para ajustarse al contenedor*/
+            box-sizing: border-box; /*padding y bordes en el ancho*/
+        }
+        button {
+            background: #007acc; /*Fondo azul*/
+            color: white; /*Color del texto*/
+            cursor: pointer; /*Accion de cambio de color si el cursor se encuentra sobre el boton*/
+            transition: background 0.3s ease; /*Tiempo de transicion para cambio de color*/
+        }
+        button:hover { /*Accion que causa que cuando el cursos se encuentre encima del boton este cambie de color*/
+            background: #005a99; /*Nuevo color del boton*/
+        }
+        .resultado {
+            margin-top: 20px; /*Tamaño del margen superior*/
+            padding: 20px; /*Tamaño del espaciado*/
+            border: 1px solid #e0e0e0; /*Tamaño y color del borde*/
+            border-radius: 8px; /*Tamaño de los bordes circulares*/
+            background-color: #f9f9f9; /*Color del fondo*/
+        }
+        .division-sintetica {
+            margin-top: 20px; /*Tamaño del margen superior*/
+            padding: 10px; /*Tamaño del espaciado*/
+            border: 1px solid #ddd; /*Tamaño y color del borde*/
+            border-radius: 8px; /*Tamaño de los bordes redondos*/
+            background-color: #fefefe; /*Color del fondo*/
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /*Tamaño y color de sobras*/
+        }
+        .division-sintetica table {
+            margin: 0 auto; /*Centra horizontalmente*/
+            border-spacing: 0;/*Espacio entre las celdas*/
+            width: 100%; /*Porcentaje del ancho*/
+            max-width: 600px; /*Ancho maximo*/
+            border-collapse: collapse; /*Combina los bordes*/
+        }
+        .division-sintetica th, .division-sintetica td {
+            padding: 10px 15px; /*Espaciado interior*/
+            text-align: center; /*Alineacion del texto*/
+            font-size: 16px; /*Tamaño de la fuente del texto*/
+        }
+        .division-sintetica .linea {
+            border-bottom: 3px solid #007acc; /*Tamaño y color del borde del boton*/
+        }
+        .division-sintetica tr:first-child td {
+            font-weight: bold; /*Texto en negritas*/
+            color: #444; /*Color del texto*/
+        }
+        .highlight {
+            color: #007acc; /*Color de texto*/
+            font-weight: bold; /*Texto en negritas*/
+        }
+        .nota {
+            font-size: 14px; /*Tamaño de la fuente del texto*/
+            color: #555; /*Color del texto*/
+            margin-top: 10px; /*Margen superior*/
+            text-align: center; /*Alineacion del texto*/
+        }
+        .empty {
+            color: #999; /*Color del texto*/
+            font-style: italic; /*Fuente del texto*/
+        }
+    </style>
+</head>
+<body> <!--Cuerpo de la pagina-->
+    
+    <header>
+        <h1>División Sintética y Raíces</h1> <!--Titulo en el encabezado-->
+    </header>
+    <main>
+        <p>Introduce los coeficientes del polinomio separados por comas (ejemplo: <span class="highlight">1, 2, 7, 6</span>):</p> <!--Texto, indicaciones-->
+        <input type="text" id="coeficientes" placeholder="Coeficientes (ejemplo: 1, 2, 7, 6)"> <!--Asignacion de clases para identificarlos-->
+        <button onclick="calcular()">Calcular Raíces y División</button> <!--Boton y texto que este lleva-->
+
+        <div id="resultados"></div> <!--Contenedor para los resultados-->
+    </main>
+    <script>
+        function factores(num) { /*Funcion para calcular los factores*/
+            const absNum = Math.abs(num); /*Se obtiene el valor absoluto*/
+            const factores = []; /*Array para almacenar los factores*/
+            for (let i = 1; i <= absNum; i++) { /*Ciclo for que se inicializa en 1 y termina hasta que el valor de i es igual al valor absoluto*/
+                if (absNum % i === 0) { /*Si el modulo de valor absoluto con el valor actual de i es 0*/
+                    factores.push(i, -i); /*Se agrega ese valor al array de factores y se toma tanto como positivo como negativo*/
+                }
+            }
+            return factores; /*Retorna el array de factores*/
+        }
+
+        function divisionSintetica(coeficientes, raiz) { /*Funcion para la division sintetica*/
+            const resultados = [coeficientes[0]]; /*En el array resultados se alamacena el primer coeficiente*/
+            const intermedios = [];/*array para valores intermedios*/
+
+            for (let i = 1; i < coeficientes.length; i++) { /*ciclo for que inicializa en 1 y hasta que el valor de i sea menor a la cantidad de coeficientes*/
+                const valorIntermedio = resultados[i - 1] * raiz; /*Se calcula el valor intermedio*/
+                intermedios.push(valorIntermedio); /*Se agrega ese valor intermedio al array de valores intermedios*/
+                resultados.push(coeficientes[i] + valorIntermedio); /*Calcula el siguiente resultado */
+            }
+
+            return { resultados, intermedios, residuo: resultados[resultados.length - 1] }; /*retorna el resultado y los residuos*/
+        }
+
+        function calcular() { /*Funcion para calular raices y aplicarles validarlas*/
+            const coefInput = document.getElementById("coeficientes").value; /*Se obtienen los coeficientes*/
+            const coeficientes = coefInput.split(",").map(Number);/*Se convierte la entrada en string a numeros*/
+
+            if (coeficientes.some(isNaN)) { /*Verifica si alguno de los valores ingresados no es numero*/
+                alert("Por favor, introduce valores numéricos válidos."); /*Alerta en dado caso un valor no sea numero*/
+                return;
+            }
+
+            const terminoIndependiente = coeficientes[coeficientes.length - 1]; /*Se alamacena el ultimo coeficiente*/
+            const coefLider = coeficientes[0]; /*Se alamcena el primer coeficiente*/
+
+            const factoresNumerador = factores(terminoIndependiente); /*Factores del ultimo coeficiente*/
+            const factoresDenominador = factores(coefLider);/*Factores del primer coeficiente*/
+
+            const posiblesRaices = []; /*array para almacenar las posibles raices*/
+            factoresNumerador.forEach(num => {  /*Toma un factor del ultimo coeficiente*/
+                factoresDenominador.forEach(den => { /*Toma un factor del primer coeficiente*/
+                    const raiz = num / den; /*Calcula una raiz dividiendo un factor del ultimo coeficiente con un facot del primer coeficiente*/
+                    if (!posiblesRaices.includes(raiz)) {/*Se verifica que no haya duplicados*/
+                        posiblesRaices.push(raiz); /*Se almacena la raiz en el array de posibles raices*/
+                    }
+                });
+            });
+
+            const raicesReales = []; /*Array para almacenar las raices reales del polinomio*/
+            const pasosDivision = [];/*Array para almacenar la raiz, resultados e intermedios en caso de que la raiz evaluada sea verdadera*/
+
+            posiblesRaices.forEach(raiz => { /*Se toma una pisble raiz del array*/
+                const { resultados, intermedios, residuo } = divisionSintetica(coeficientes, raiz); /*Evalua la raiz usando la funcion division sintetica*/
+                if (residuo === 0) {/*Si el resultado del residuo es 0*/
+                    raicesReales.push(raiz);/*Almacena la raiz en el array de raices reales*/
+                    pasosDivision.push({ raiz, resultados, intermedios });/*Almacena la raiz, resultados e intermedios*/
+                }
+            });
+
+            let html = `
+                <div class="resultado"> 
+                    <h3>Posibles raíces :</h3>
+                    <p>${posiblesRaices.join(", ")}</p>  
+                    <h3>Raíces encontradas:</h3>
+
+
+                    <p>${raicesReales.length > 0 ? raicesReales.join(", ") : "<span class='empty'>No se encontraron raíces reales.</span>"}</p> 
+                </div>
+            `;
+
+            pasosDivision.forEach(({ raiz, resultados, intermedios }) => { /*Toma la raiz, resultados e intermedios del array */
+                html += `
+                    <div class="division-sintetica">    
+                        <h3>División sintética para la raíz: <span class="highlight">${raiz}</span></h3> 
+                        <table>
+                            <tr>
+                                ${coeficientes.map(c => `<td>${c}</td>`).join("")} 
+                            </tr>
+                            <tr class="linea">
+                                <td>    </td> 
+                                ${intermedios.map(i => `<td>${i}</td>`).join("")} 
+                                <td></td>
+                            </tr>
+                            <tr>
+                                ${resultados.map(r => `<td>${r}</td>`).join("")}
+                            </tr>
+                        </table>
+                    </div>
+                `;
+            });
+
+            document.getElementById("resultados").innerHTML = html;
+        }
+    </script>
+</body>
+</html>
